@@ -9,14 +9,14 @@ import UIKit
 
 final class WelcomeViewController: UIViewController {
     
-    @IBOutlet var logOutBatton: UIButton!
+    @IBOutlet var logOutButton: UIButton!
     @IBOutlet var welcomeLabel: UILabel!
     
-    var welcomeLab: String = ""
+    var welcomeString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        logOutBatton.layer.cornerRadius = 10
-        welcomeLabel.text = "Welcome, \(welcomeLab)!"
+        logOutButton.layer.cornerRadius = 10
+        welcomeLabel.text = "Welcome, \(welcomeString)!"
     }
 }

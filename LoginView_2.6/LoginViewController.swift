@@ -7,43 +7,71 @@
 
 import UIKit
 
-final class LoginViewController: UIViewController, UITextFieldDelegate {
+final class LoginViewController: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet var userNameTF: UITextField!
     @IBOutlet var passwordTF: UITextField!
     @IBOutlet var logInButton: UIButton!
     
+    // MARK: - Properties
+    private let userName = "User"
+    private let password = "123"
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         logInButton.layer.cornerRadius = 8
-        userNameTF.delegate = self
-        passwordTF.delegate = self
     }
     
-            @IBAction func userNameButtonAction() {
-                showAlert(withTitle: "Hello!", andMessage: "Your Name is User")
-            }
+    // MARK: - IBActions
+    @IBAction func userNameButtonAction() {
+        showAlert(
+            withTitle: "Hello!",
+            andMessage: "Your Name is \(userName)"
+        )
+    }
     
-            @IBAction func passwordButtonAction() {
-                showAlert(withTitle: "Ok!", andMessage: "Your password: 123")
-            }
+    @IBAction func passwordButtonAction() {
+        showAlert(
+            withTitle: "Ok!",
+            andMessage: "Your password: \(password)"
+        )
+    }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    // MARK: - Methods
+    override func touchesBegan(
+        _ touches: Set<UITouch>,
+        with event: UIEvent?
+    ) {
+        super .touchesBegan(touches, with: event)
         self.view.endEditing(true)
     }
     
-    private func showAlert(withTitle title: String, andMessage message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    private func showAlert(
+        withTitle title: String,
+        andMessage message: String
+    ) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
         let okAlert = UIAlertAction(title: "Ok", style: .cancel)
         alert.addAction(okAlert)
         present(alert, animated: true)
     }
     
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        guard userNameTF.text == "User" && passwordTF.text == "123" else {
+    // MARK: - Navigation
+    override func shouldPerformSegue(
+        withIdentifier identifier: String,
+        sender: Any?
+    ) -> Bool {
+        guard userNameTF.text == userName,
+              passwordTF.text == password else {
             showAlert(
                 withTitle: "Invalid login or password",
-                andMessage: "Pliese, enter correct login and password"
+                andMessage: "Please, enter correct login and password"
             )
             return false
         }
@@ -51,13 +79,12 @@ final class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let secondVC = segue.destination as? WelcomViewController
-        secondVC?.welcomeLab = userNameTF.text
-        
-        
-
-        
-        
+        let secondVC = segue.destination as? WelcomeViewController
+        secondVC?.welcomeString = userNameTF.text ?? ""
     }
     
+    @IBAction func unwind(for segue: UIStoryboardSegue) {
+        userNameTF.text = ""
+        passwordTF.text = ""
+    }
 }
