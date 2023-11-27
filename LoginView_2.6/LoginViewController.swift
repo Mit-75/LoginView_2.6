@@ -7,16 +7,29 @@
 
 import UIKit
 
-final class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController, UITextFieldDelegate {
     
-    @IBOutlet var logInButton: UIButton!
     @IBOutlet var userNameTF: UITextField!
     @IBOutlet var passwordTF: UITextField!
+    @IBOutlet var logInButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         logInButton.layer.cornerRadius = 8
-        
+        userNameTF.delegate = self
+        passwordTF.delegate = self
+    }
+    
+            @IBAction func userNameButtonAction() {
+                showAlert(withTitle: "Hello!", andMessage: "Your Name is User")
+            }
+    
+            @IBAction func passwordButtonAction() {
+                showAlert(withTitle: "Ok!", andMessage: "Your password: 123")
+            }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     private func showAlert(withTitle title: String, andMessage message: String) {
@@ -26,27 +39,25 @@ final class LoginViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    @IBAction func loginButtonAction() {
-        showAlert(withTitle: "Invalid login or password", andMessage: "Pliese, enter correct login and password")
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        guard userNameTF.text == "User" && passwordTF.text == "123" else {
+            showAlert(
+                withTitle: "Invalid login or password",
+                andMessage: "Pliese, enter correct login and password"
+            )
+            return false
+        }
+        return true
     }
     
-    @IBAction func userNameButtonAction() {
-        showAlert(withTitle: "Hello!", andMessage: "Your Name is User")
-    }
-    
-    @IBAction func passwordButtonAction() {
-        showAlert(withTitle: "Ok!", andMessage: "Your password: 123")
-    }
-    
-//    // Метод для скрытия клавиатуры тапом по экрану
-//    override func touchesBegan(_ touches: Set, with event: UIEvent?) {
-//        super .touchesBegan(touches, with: event)
-//    }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        userNameTF.resignFirstResponder()
-    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let secondVC = segue.destination as? WelcomViewController
+        secondVC?.welcomeLab = userNameTF.text
+        
+        
 
-
+        
+        
+    }
+    
 }
-
